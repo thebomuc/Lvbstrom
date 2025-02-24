@@ -64,3 +64,7 @@ app.post("/fill-pdf", upload.single("pdfFile"), async (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server läuft auf Port 3000"));
+
+app.get("/", (req, res) => {
+    res.send("Server läuft!");
+});
