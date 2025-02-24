@@ -1,0 +1,19 @@
+{
+  "name": "pdf-filler-server",
+  "version": "1.0.0",
+  "description": "Ein Node.js-Server zur Bearbeitung und Befüllung von PDFs.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "pdf-lib": "^1.17.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
