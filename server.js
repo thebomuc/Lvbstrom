@@ -18,6 +18,14 @@ if (!fs.existsSync(pdfTemplatePath)) {
 
 app.post("/fill-pdf", async (req, res) => {
     try {
+        console.log("🟢 Anfrage erhalten:", req.body); // Debugging
+
+        // Prüfen, ob die PDF-Datei existiert
+        if (!fs.existsSync(pdfTemplatePath)) {
+            console.error("❌ PDF-Vorlage nicht gefunden!");
+            return res.status(500).send("PDF-Vorlage fehlt!");
+        }
+
         const existingPdfBytes = fs.readFileSync(pdfTemplatePath);
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const form = pdfDoc.getForm();
@@ -57,12 +65,14 @@ app.post("/fill-pdf", async (req, res) => {
         const outputPath = path.join(__dirname, "output.pdf");
         fs.writeFileSync(outputPath, filledPdfBytes);
 
+        console.log("✅ PDF erfolgreich generiert!");
+
         res.download(outputPath, "filled-form.pdf", () => {
             fs.unlinkSync(outputPath);
         });
 
     } catch (error) {
-        console.error("Fehler bei der PDF-Bearbeitung:", error);
+        console.error("❌ Fehler bei der PDF-Bearbeitung:", error);
         res.status(500).send("Fehler bei der PDF-Bearbeitung");
     }
 });
