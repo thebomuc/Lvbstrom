@@ -43,6 +43,7 @@ app.post("/fill-pdf", async (req, res) => {
             "KNachname": "knachname",
             "Geburtsdatum": "geburtstag",    
             "KTelefon": "telefon", 
+            "KFirma": "firma",
             "KEmail": "email",
             "KFax": "fax",
             "KHandy": "handy",
@@ -64,6 +65,7 @@ app.post("/fill-pdf", async (req, res) => {
 const combinedFieldMap = {
     "PLZOrt": ["kplz", "kort"],
     "KLieferanschriftPLZOrt": ["lplz", "lort"]
+    "KPLZOrt": ["kplz", "kort"]
 };
 
 for (const [pdfField, inputFields] of Object.entries(combinedFieldMap)) {
