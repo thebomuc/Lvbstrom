@@ -57,6 +57,7 @@ app.post("/fill-pdf", async (req, res) => {
             "IBAN": "iban",
             "Bankname": "bankname",
             "BIC": "bic",
+            "gesetzlicherVertreter": "vertreter",
             "Kundentyp": "kundentyp"
         };
 
