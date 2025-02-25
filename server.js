@@ -33,16 +33,44 @@ app.post("/fill-pdf", async (req, res) => {
         const formData = req.body;
 
         const fieldMap = {
-            "Vorname": "vorname",
-            "Nachname": "nachname",
-            "StraßeNr": "strasse",
-            "PLZOrt": "plz",
+            "Stromnutzung": "stromnutzung",
+            "Kreisverband": "kreisverband",
+            "Kreisverbandscode": "kreisverbandscode",
+            "Mitgliedsnummer": "mitgliedsnummer",
+            "Vorname": "kvorname",
+            "Nachname": "knachname",
+            "KVorname": "kvorname",
+            "KNachname": "knachname",
+            "KTelefon": "telefon",
+            "KEmail": "email",
+            "KFax": "fax",
+            "KHandy": "handy",
+            "StraßeNr": "kstr",
+            "KStrasse": "kstr",
+            "KLieferanschriftStr": "lstr",
             "Stromversorger": "stromversorger",
+            "Stromvertragsnummer": "vertragsnummer",
+            "Marktlokationen": "marktl",
+            "Verbrauch": "verbrauch",
             "Zählernummer": "zaehlernummer",
             "IBAN": "iban",
             "Bankname": "bankname",
             "BIC": "bic"
+            "Kundentyp": "kundentyp"
         };
+
+const combinedFieldMap = {
+    "PLZOrt": ["kplz", "kort"],
+    "KLieferanschriftPLZOrt": ["lplz", "lort"]
+};
+
+for (const [pdfField, inputFields] of Object.entries(combinedFieldMap)) {
+    const field = form.getTextField(pdfField);
+    if (field) {
+        const combinedText = inputFields.map(f => formData[f] || "").join(" ");
+        field.setText(combinedText);
+    }
+}
 
         for (const [pdfField, formField] of Object.entries(fieldMap)) {
             const field = form.getTextField(pdfField);
@@ -59,7 +87,7 @@ app.post("/fill-pdf", async (req, res) => {
             const field = form.getTextField(dateField);
             if (field) {
                 field.setText(`${ort}, ${aktuellesDatum}`);
-            }
+            }or
         }
 
         const filledPdfBytes = await pdfDoc.save();
