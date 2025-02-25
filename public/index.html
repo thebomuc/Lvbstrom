@@ -145,7 +145,7 @@
                 <tr><td><label for="lplz">PLZ:</label></td><td><input type="number" id="lplz" name="lplz" oninput="fetchCity2()" required></td></tr>
                 <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
                 <tr><td>Angaben zur Strombelieferung</td></tr>
-		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input type="text" id="stromversorger" name="stromversorger" required></td></tr>
+		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input list="stromversorger-list" id="stromversorger" name="stromversorger" required><datalist id="stromversorger-list"></datalist></td></tr>
                 <tr><td><label for="zaehlernummer">Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer"></td></tr>
 		<tr><td><label for="marktl">Marktlokationen:</label></td><td><input type="number" id="marktl" name="marktl" required></td></tr>
 		<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
@@ -172,6 +172,20 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const response = await fetch("/api/stromanbieter");
+        const stromanbieter = await response.json();
+        const datalist = document.getElementById("stromversorger-list");
+
+        stromanbieter.forEach(anbieter => {
+            const option = document.createElement("option");
+            option.value = anbieter;
+            datalist.appendChild(option);
+        });
+    });
+</script>
 
 <script>
 function copyAddress() {
