@@ -87,7 +87,7 @@ for (const [pdfField, inputFields] of Object.entries(combinedFieldMap)) {
             const field = form.getTextField(dateField);
             if (field) {
                 field.setText(`${ort}, ${aktuellesDatum}`);
-            }or
+            }
         }
 
         const filledPdfBytes = await pdfDoc.save();
