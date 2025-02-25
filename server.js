@@ -17,6 +17,8 @@ if (!fs.existsSync(pdfTemplatePath)) {
     process.exit(1); // Beende den Server, falls die Datei fehlt
 }
 
+
+
 app.post("/fill-pdf", async (req, res) => {
     try {
         console.log("🟢 Anfrage erhalten:", req.body); // Debugging
@@ -40,8 +42,7 @@ app.post("/fill-pdf", async (req, res) => {
             "Vorname": "kvorname",
             "Nachname": "knachname",
             "KVorname": "kvorname",
-            "KNachname": "knachname",
-            "Geburtsdatum": "geburtstag",    
+            "KNachname": "knachname",    
             "KTelefon": "telefon", 
             "KFirma": "firma",
             "KEmail": "email",
@@ -93,6 +94,31 @@ for (const [pdfField, inputFields] of Object.entries(combinedFieldMap)) {
                 field.setText(`${ort}, ${aktuellesDatum}`);
             }
         }
+
+        function formatDateToGerman(dateString) {
+    if (!dateString) return "";
+    const [year, month, day] = dateString.split("-");
+    return `${day}.${month}.${year}`; // Format: DD.MM.YYYY
+}
+
+const fieldMap = {
+    "Geburtsdatum": "geburtstag"
+};
+
+for (const [pdfField, formField] of Object.entries(fieldMap)) {
+    const field = form.getTextField(pdfField);
+    if (field && formData[formField]) {
+        let value = formData[formField];
+
+        // Falls es ein Datum ist, ins deutsche Format umwandeln
+        if (formField === "geburtstag") {
+            value = formatDateToGerman(value);
+        }
+
+        field.setText(value);
+    }
+}
+
 
         const filledPdfBytes = await pdfDoc.save();
         const outputPath = path.join(__dirname, "output.pdf");
