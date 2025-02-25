@@ -2,12 +2,14 @@ const express = require("express");
 const { PDFDocument } = require("pdf-lib");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(cors());
 
 const pdfTemplatePath = path.join(__dirname, "Stromberatungsvertrag.pdf");
 
@@ -40,8 +42,8 @@ app.post("/fill-pdf", async (req, res) => {
             "Vorname": "kvorname",
             "Nachname": "knachname",
             "KVorname": "kvorname",
-            "KNachname": "knachname",    
-            "KTelefon": "telefon", 
+            "KNachname": "knachname",
+            "KTelefon": "telefon",
             "KFirma": "firma",
             "KEmail": "email",
             "KFax": "fax",
@@ -127,6 +129,26 @@ app.post("/fill-pdf", async (req, res) => {
         console.error("❌ Fehler bei der PDF-Bearbeitung:", error);
         res.status(500).send("Fehler bei der PDF-Bearbeitung");
     }
+});
+
+// API-Endpunkt für Stromanbieter-Liste
+app.get("/api/stromanbieter", (req, res) => {
+    const filePath = path.join(__dirname, "public", "stromanbieter.json");
+    
+    fs.readFile(filePath, "utf8", (err, data) => {
+        if (err) {
+            console.error("Fehler beim Lesen der Datei:", err);
+            return res.status(500).json({ error: "Interner Serverfehler" });
+        }
+        
+        try {
+            const stromanbieter = JSON.parse(data);
+            res.json(stromanbieter);
+        } catch (parseError) {
+            console.error("Fehler beim Parsen der JSON-Datei:", parseError);
+            res.status(500).json({ error: "Fehler beim Verarbeiten der Datei" });
+        }
+    });
 });
 
 // Fehlerbehandlung
