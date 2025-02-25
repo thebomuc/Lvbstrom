@@ -87,23 +87,26 @@
                 <tr><td><label for="kreisverband">Kreisverband:</label></td><td><input type="text" id="kreisverband" name="kreisverband" required></td></tr>
                 <tr><td><label for="kreisverbandscode">Kreisverbandscode:</label></td><td><input type="text" id="kreisverbandscode" name="kreisverbandscode" required></td></tr>
                 <tr><td><label for="mitgliedsnummer">Mitgliedsnummer:</label></td><td><input type="text" id="mitgliedsnummer" name="mitgliedsnummer" required></td></tr>
-                <tr><td><label for="vorname">Vorname:</label></td><td><input type="text" id="vorname" name="vorname" required></td></tr>
-                <tr><td><label for="nachname">Nachname:</label></td><td><input type="text" id="nachname" name="nachname" required></td></tr>
-                <tr><td><label for="strasse">Straße u. Hausnummer:</label></td><td><input type="text" id="strasse" name="strasse" required></td></tr>
-                <tr><td><label for="plz">PLZ:</label></td><td><input type="text" id="plz" name="plz" required></td></tr>
-                <tr><td><label for="ort">Ort:</label></td><td><input type="text" id="ort" name="ort" required></td></tr>
+                <tr><td><label for="kvorname">Vorname:</label></td><td><input type="text" id="kvorname" name="kvorname" required></td></tr>
+                <tr><td><label for="knachname">Nachname:</label></td><td><input type="text" id="knachname" name="knachname" required></td></tr>
+                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" required></td></tr>
+                <tr><td><label for="kplz">PLZ:</label></td><td><input type="text" id="kplz" name="kplz" required></td></tr>
+                <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" required></td></tr>
 				<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
-				<tr><td><label for="strassel">Straße u. Hausnummer:</label></td><td><input type="text" id="strasse" name="strasse" required></td></tr>
-                <tr><td><label for="plzl">PLZ:</label></td><td><input type="text" id="plz" name="plz" required></td></tr>
-                <tr><td><label for="ortl">Ort:</label></td><td><input type="text" id="ort" name="ort" required></td></tr>
-                <tr><td><label for="stromversorger">Stromversorger:</label></td><td><input type="text" id="stromversorger" name="stromversorger"></td></tr>
-                <tr><td><label for="zaehlernummer">Strom Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer" required></td></tr>
-				<tr><td><label for="marktlokationen">Strom Marktlokationen:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer" required></td></tr>
-				<tr><td><label for="Strom Vertragsnummer">Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer" required></td></tr>
-                <tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" required></td></tr>
+				<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
+                <tr><td><label for="lplz">PLZ:</label></td><td><input type="text" id="lplz" name="lplz" required></td></tr>
+                <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
+                <tr><td>Angaqben zur Strombelieferung</td></tr>
+				<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input type="text" id="stromversorger" name="stromversorger"></td></tr>
+                <tr><td><label for="zaehlernummer">Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer" required></td></tr>
+				<tr><td><label for="marktl">Marktlokationen:</label></td><td><input type="text" id="marktl" name="marktl" required></td></tr>
+				<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
+                <tr><td><label for="verbrauch">Verbrauch Vorjahr:</label></td><td><input type="text" id="verbrauch" name="verbrauch" required></td></tr>
+				<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" required></td></tr>
                 <tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
                 <tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic"></td></tr>
                 <tr><td><label for="telefon">Telefon:</label></td><td><input type="text" id="telefon" name="telefon"></td></tr>
+				<tr><td><label for="fax">Fax:</label></td><td><input type="text" id="fax" name="fax"></td></tr>
                 <tr><td><label for="email">E-Mail (für Rechnungen):</label></td><td><input type="email" id="email" name="email"></td></tr>
                 <tr><td><label for="kundentyp">Kundentyp:</label></td>
                     <td>
@@ -121,6 +124,6 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
-<script> document.addEventListener("DOMContentLoaded", function() { document.getElementById("datum").value = new Date().toLocaleDateString("de-DE"); }); document.getElementById("pdfForm").addEventListener("submit", async function(event) { event.preventDefault(); const formData = new FormData(this); const jsonData = {}; formData.forEach((value, key) => jsonData[key] = value); const response = await fetch("https://lvbstrom.onrender.com/fill-pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(jsonData) }); if (response.ok) { const blob = await response.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "filled-form.pdf"; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url); } else { alert("Fehler beim Generieren der PDF."); } }); </script>
+	<script> document.addEventListener("DOMContentLoaded", function() { document.getElementById("datum").value = new Date().toLocaleDateString("de-DE"); }); document.getElementById("pdfForm").addEventListener("submit", async function(event) { event.preventDefault(); const formData = new FormData(this); const jsonData = {}; formData.forEach((value, key) => jsonData[key] = value); const response = await fetch("https://lvbstrom.onrender.com/fill-pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(jsonData) }); if (response.ok) { const blob = await response.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "filled-form.pdf"; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url); } else { alert("Fehler beim Generieren der PDF."); } }); </script>
 </body>
 </html>
