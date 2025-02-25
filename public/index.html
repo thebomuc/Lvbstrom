@@ -91,11 +91,11 @@
                 <tr><td><label for="knachname">Nachname:</label></td><td><input type="text" id="knachname" name="knachname" required></td></tr>
 		<tr><td><label for="geburtstag">Geburtstag:</label></td><td><input type="date" id="geburtstag" name="geburtstag"></td></tr>    
                 <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" oninput="copyAddress()" required></td></tr>
-                <tr><td><label for="kplz">PLZ:</label></td><td><input type="text" id="kplz" name="kplz" oninput="copyAddress()" required></td></tr>
+                <tr><td><label for="kplz">PLZ:</label></td><td><input type="text" id="kplz" name="kplz" placeholder="z. B. 80331" oninput="fetchCity(); copyAddress()" required></td></tr>
                 <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
 		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
 		<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
-                <tr><td><label for="lplz">PLZ:</label></td><td><input type="text" id="lplz" name="lplz" required></td></tr>
+                <tr><td><label for="lplz">PLZ:</label></td><td><input type="text" id="lplz" name="lplz" oninput="fetchCity2() required></td></tr>
                 <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
                 <tr><td>Angaben zur Strombelieferung</td></tr>
 		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input type="text" id="stromversorger" name="stromversorger"></td></tr>
@@ -125,6 +125,69 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+
+<script>
+    function fetchCity() {
+      const plz = document.getElementById("kplz").value.trim();
+
+      // In Deutschland hat die PLZ genau 5 Stellen.
+      if (plz.length === 5) {
+        fetch(`https://api.zippopotam.us/de/${plz}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Keine Daten gefunden");
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.places && data.places.length > 0) {
+              // Das erste Element enthält in der Regel den gewünschten Ortsnamen.
+              document.getElementById("kort").value = data.places[0]["place name"];
+            } else {
+              document.getElementById("kort").value = "";
+            }
+          })
+          .catch(error => {
+            console.error("Fehler beim Abrufen des Orts:", error);
+            document.getElementById("kort").value = "";
+          });
+      } else {
+        // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
+        document.getElementById("kort").value = "";
+      }
+    }
+  </script>
+  <script>
+    function fetchCity2() {
+      const plz = document.getElementById("lplz").value.trim();
+
+      // In Deutschland hat die PLZ genau 5 Stellen.
+      if (plz.length === 5) {
+        fetch(`https://api.zippopotam.us/de/${plz}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Keine Daten gefunden");
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.places && data.places.length > 0) {
+              // Das erste Element enthält in der Regel den gewünschten Ortsnamen.
+              document.getElementById("lort").value = data.places[0]["place name"];
+            } else {
+              document.getElementById("lort").value = "";
+            }
+          })
+          .catch(error => {
+            console.error("Fehler beim Abrufen des Orts:", error);
+            document.getElementById("lort").value = "";
+          });
+      } else {
+        // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
+        document.getElementById("kort").value = "";
+      }
+    }
+  </script>
 
 	
         <script>
