@@ -154,6 +154,7 @@ function copyAddress() {
             if (data.places && data.places.length > 0) {
               // Das erste Element enthält in der Regel den gewünschten Ortsnamen.
               document.getElementById("kort").value = data.places[0]["place name"];
+		document.getElementById("lort").value = data.places[0]["place name"];
             } else {
               document.getElementById("kort").value = "";
             }
@@ -165,8 +166,7 @@ function copyAddress() {
       } else {
         // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
         document.getElementById("kort").value = "";
-      }
-    copyAddress()    
+      }  
     }
   </script>
   <script>
