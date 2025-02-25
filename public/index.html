@@ -102,9 +102,15 @@
 				<tr><td><label for="marktl">Marktlokationen:</label></td><td><input type="text" id="marktl" name="marktl" required></td></tr>
 				<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
                 <tr><td><label for="verbrauch">Verbrauch Vorjahr:</label></td><td><input type="text" id="verbrauch" name="verbrauch" required></td></tr>
-				<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" required></td></tr>
+	        
+		    
+		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" oninput="validateIban()" required></td></tr>
+		
+		    
                 <tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
-                <tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic"></td></tr>
+
+
+	        <tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic"></td></tr>
                 <tr><td><label for="telefon">Telefon:</label></td><td><input type="text" id="telefon" name="telefon"></td></tr>
 				<tr><td><label for="fax">Fax:</label></td><td><input type="text" id="fax" name="fax"></td></tr>
                 <tr><td><label for="email">E-Mail (für Rechnungen):</label></td><td><input type="email" id="email" name="email"></td></tr>
@@ -124,6 +130,46 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+
+	<script>
+    async function validateIban() {
+      const ibanInput = document.getElementById('iban');
+      const bicInput = document.getElementById('bic');
+      const banknameInput = document.getElementById('bankname');
+      const iban = ibanInput.value.trim();
+
+      // Mindestlänge prüfen (variabel je nach Land, hier als Beispiel 15 Zeichen)
+      if (iban.length < 15) {
+        bicInput.value = "";
+        banknameInput.value = "";
+        return;
+      }
+
+      // URL zur OpenIBAN API zusammenbauen
+      const url = `https://openiban.com/validate/${iban}?getBIC=true&validateBankCode=true`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Netzwerkantwort war nicht ok");
+        }
+        const data = await response.json();
+
+        // Wenn die IBAN validiert wurde und Bankdaten vorhanden sind, vorbefüllen
+        if (data.valid && data.bankData) {
+          bicInput.value = data.bankData.bic || "";
+          banknameInput.value = data.bankData.name || "";
+        } else {
+          bicInput.value = "";
+          banknameInput.value = "";
+        }
+      } catch (error) {
+        console.error("Fehler bei der IBAN-Validierung:", error);
+        bicInput.value = "";
+        banknameInput.value = "";
+      }
+    }
+  </script>
 	<script>
 function copyAddress() {
     document.getElementById("lstr").value = document.getElementById("kstr").value;
