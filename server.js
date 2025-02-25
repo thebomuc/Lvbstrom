@@ -64,7 +64,7 @@ app.post("/fill-pdf", async (req, res) => {
 
 const combinedFieldMap = {
     "PLZOrt": ["kplz", "kort"],
-    "KLieferanschriftPLZOrt": ["lplz", "lort"]
+    "KLieferanschriftPLZOrt": ["lplz", "lort"],
     "KPLZOrt": ["kplz", "kort"]
 };
 
