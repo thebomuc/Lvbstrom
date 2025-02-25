@@ -95,7 +95,7 @@
                 <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
 		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
 		<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
-                <tr><td><label for="lplz">PLZ:</label></td><td><input type="text" id="lplz" name="lplz" oninput="fetchCity2() required></td></tr>
+                <tr><td><label for="lplz">PLZ:</label></td><td><input type="text" id="lplz" name="lplz" oninput="fetchCity2()" required></td></tr>
                 <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
                 <tr><td>Angaben zur Strombelieferung</td></tr>
 		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input type="text" id="stromversorger" name="stromversorger"></td></tr>
@@ -125,6 +125,14 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+
+<script>
+function copyAddress() {
+    document.getElementById("lstr").value = document.getElementById("kstr").value;
+    document.getElementById("lplz").value = document.getElementById("kplz").value;
+    document.getElementById("lort").value = document.getElementById("kort").value;
+}
+</script>
 
 <script>
     function fetchCity() {
@@ -186,6 +194,7 @@
         // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
         document.getElementById("kort").value = "";
       }
+	copyAddress()
     }
   </script>
 
@@ -229,13 +238,7 @@
       }
     }
   </script>
-	<script>
-function copyAddress() {
-    document.getElementById("lstr").value = document.getElementById("kstr").value;
-    document.getElementById("lplz").value = document.getElementById("kplz").value;
-    document.getElementById("lort").value = document.getElementById("kort").value;
-}
-</script>
+	
 	<script> document.addEventListener("DOMContentLoaded", function() { document.getElementById("datum").value = new Date().toLocaleDateString("de-DE"); }); document.getElementById("pdfForm").addEventListener("submit", async function(event) { event.preventDefault(); const formData = new FormData(this); const jsonData = {}; formData.forEach((value, key) => jsonData[key] = value); const response = await fetch("https://lvbstrom.onrender.com/fill-pdf", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(jsonData) }); if (response.ok) { const blob = await response.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "filled-form.pdf"; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url); } else { alert("Fehler beim Generieren der PDF."); } }); </script>
 </body>
 </html>
