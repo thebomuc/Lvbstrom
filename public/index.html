@@ -147,7 +147,7 @@
                 <tr><td>Angaben zur Strombelieferung</td></tr>
 		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input list="stromversorger-list" id="stromversorger" name="stromversorger" required><datalist id="stromversorger-list"></datalist></td></tr>
                 <tr><td><label for="zaehlernummer">Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer"></td></tr>
-		<tr><td><label for="marktl">Marktlokationen:</label></td><td><input type="number" id="marktl" name="marktl" required></td></tr>
+		<tr><td><label for="marktl"><a href="https://www.bundesnetzagentur.de/SharedDocs/A_Z_Glossar/M/Marktlokation.html" target="_blank" rel="noopener noreferrer">Marktlokationen (MaLo-ID):</a></label></td><td><input type="number" id="marktl" name="marktl" maxlength="11" pattern="\d{11}" required></td></tr>
 		<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
                 <tr><td><label for="verbrauch">Verbrauch Vorjahr (kWh):</label></td><td><input type="number" id="verbrauch" name="verbrauch" required></td></tr>
 		<tr><td>Kontodaten</td></tr>
