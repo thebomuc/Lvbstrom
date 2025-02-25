@@ -41,7 +41,7 @@ app.post("/fill-pdf", async (req, res) => {
             "Nachname": "knachname",
             "KVorname": "kvorname",
             "KNachname": "knachname",
-            "Geburtstag": "geburtstag",    
+            "Geburtsdatum": "geburtstag",    
             "KTelefon": "telefon",
             "Handy": "handy",  
             "KEmail": "email",
