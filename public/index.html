@@ -151,7 +151,7 @@
 		<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
                 <tr><td><label for="verbrauch">Verbrauch Vorjahr (kWh):</label></td><td><input type="number" id="verbrauch" name="verbrauch" required></td></tr>
 		<tr><td>Kontodaten</td></tr>
-		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" oninput="validateIban()" required></td></tr>
+		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" oninput="validateIban()" onblur="fetchBankDetails()" required></td></tr>
 		<tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
 		<tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic" required></td></tr>
                 <tr><td>Kontaktdaten</td></tr>
@@ -172,6 +172,46 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+<script>
+function fetchBankDetails() {
+    const ibanField = document.getElementById("iban");
+    const banknameField = document.getElementById("bankname");
+    const bicField = document.getElementById("bic");
+
+    if (banknameField.value.trim() === "") {
+        const iban = ibanField.value.trim();
+
+        // Prüfen, ob die IBAN gültig aussieht (mind. 15 Zeichen)
+        if (iban.length < 15) {
+            console.error("IBAN zu kurz oder ungültig.");
+            return;
+        }
+
+        // API-URL mit IBAN und Authcode
+        const authcode = "5373a111178bf1048681478273dd3ec3"; // <<<< HIER AUSTAUSCHEN
+        const apiUrl = `https://www.iban-test.de/api/check/${iban}?authcode=${authcode}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    banknameField.value = data.bankname || "Unbekannte Bank";
+                    bicField.value = data.bic || "";
+                } else {
+                    console.error("Fehler bei der API-Abfrage:", data.message || "Unbekannter Fehler");
+                }
+            })
+            .catch(error => console.error("API-Fehler:", error));
+    }
+}
+
+// Event-Listener für das IBAN-Feld hinzufügen
+document.getElementById("iban").addEventListener("blur", fetchBankDetails);
+</script>
+
+
+	
+
 	
 <script>
 document.addEventListener("DOMContentLoaded", function() {
