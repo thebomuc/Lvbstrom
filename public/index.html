@@ -172,55 +172,85 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
-    
-    <script>
-	document.addEventListener("DOMContentLoaded", function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                alert("Geolocation wird von diesem Browser nicht unterstützt.");
-            }
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert("Geolocation wird von diesem Browser nicht unterstützt.");
         }
+    });
 
-        function showPosition(position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
+    function showPosition(position) {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=de`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.address) {
+                    document.getElementById("ort").value = data.address.city || data.address.town || data.address.village || "Unbekannt";
+                    document.getElementById("kstr").value = (data.address.road || "") + " " + (data.address.house_number || "");
+                    document.getElementById("kplz").value = data.address.postcode || "";
+                    document.getElementById("kort").value = data.address.city || data.address.town || data.address.village || "";
+                } else {
+                    alert("Standortinformationen konnten nicht ermittelt werden.");
+                }
+            })
+            .catch(error => {
+                console.error("Fehler beim Abrufen der Adresse:", error);
+                alert("Fehler beim Abrufen der Adresse.");
+            });
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("Nutzer hat die Standortanfrage abgelehnt.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Standortinformationen sind nicht verfügbar.");
+                break;
+            case error.TIMEOUT:
+                alert("Die Standortanfrage hat zu lange gedauert.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("Ein unbekannter Fehler ist aufgetreten.");
+                break;
+        }
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const response = await fetch("/api/stromanbieter");
+            if (!response.ok) throw new Error("Serverantwort war nicht erfolgreich.");
             
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=de`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.address) {
-                        document.getElementById("ort").value = data.address.city || data.address.town || data.address.village || "Unbekannt";
-			document.getElementById("kstr").value = data.address.road + " " + data.address.house_number;
-                        document.getElementById("kplz").value = data.address.postcode || "";
-                        document.getElementById("kort").value = data.address.city || data.address.town || data.address.village || "";
-                    } else {
-                        alert("Standortinformationen konnten nicht ermittelt werden.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Fehler beim Abrufen der Adresse:", error);
-                    alert("Fehler beim Abrufen der Adresse.");
-                });
-        }
+            const stromanbieter = await response.json();
+            const datalist = document.getElementById("stromversorger-list");
 
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    alert("Nutzer hat die Standortanfrage abgelehnt.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    alert("Standortinformationen sind nicht verfügbar.");
-                    break;
-                case error.TIMEOUT:
-                    alert("Die Standortanfrage hat zu lange gedauert.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    alert("Ein unbekannter Fehler ist aufgetreten.");
-                    break;
+            if (!datalist) {
+                console.error("Element mit ID 'stromversorger-list' nicht gefunden.");
+                return;
             }
+
+            stromanbieter.forEach(anbieter => {
+                const option = document.createElement("option");
+                option.value = anbieter;
+                datalist.appendChild(option);
+            });
+        } catch (error) {
+            console.error("Fehler beim Laden der Stromanbieter:", error);
         }
-    </script>	
+    });
+</script>
+
+    
+
+
+
+	
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         const response = await fetch("/api/stromanbieter");
