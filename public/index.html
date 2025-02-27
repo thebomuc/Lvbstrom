@@ -187,12 +187,16 @@ function fetchBankDetails() {
             return;
         }
 
-        // API-URL mit IBAN und Authcode
-        const authcode = "5373a111178bf1048681478273dd3ec3"; // <<<< HIER AUSTAUSCHEN
-        const apiUrl = `https://www.iban-test.de/api/check/${iban}?authcode=${authcode}`;
+        // API-URL mit deinem eigenen Service
+        const apiUrl = `https://fetchbankdetails.onrender.com/api/check/${iban}`;
 
         fetch(apiUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     banknameField.value = data.bankname || "Unbekannte Bank";
@@ -208,10 +212,6 @@ function fetchBankDetails() {
 // Event-Listener für das IBAN-Feld hinzufügen
 document.getElementById("iban").addEventListener("blur", fetchBankDetails);
 </script>
-
-
-	
-
 	
 <script>
 document.addEventListener("DOMContentLoaded", function() {
