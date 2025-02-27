@@ -142,7 +142,7 @@
                 <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
 		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
 		<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
-                <tr><td><label for="lplz">PLZ:</label></td><td><input type="number" id="lplz" name="lplz" oninput="fetchCity2()" required></td></tr>
+                <tr><td><label for="lplz">PLZ:</label></td><td><input type="number" id="lplz" name="lplz" oninput="fetchCity()" required></td></tr>
                 <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
                 <tr><td>Angaben zur Strombelieferung</td></tr>
 		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input list="stromversorger-list" id="stromversorger" name="stromversorger" required><datalist id="stromversorger-list"></datalist></td></tr>
@@ -264,68 +264,25 @@ function copyAddress() {
 </script>
 
 <script>
-    function fetchCity() {
-      const plz = document.getElementById("kplz").value.trim();
-
-      // In Deutschland hat die PLZ genau 5 Stellen.
-      if (plz.length === 5) {
-        fetch(`https://api.zippopotam.us/de/${plz}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Keine Daten gefunden");
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data.places && data.places.length > 0) {
-              // Das erste Element enthält in der Regel den gewünschten Ortsnamen.
-              document.getElementById("kort").value = data.places[0]["place name"];
-		document.getElementById("lort").value = data.places[0]["place name"];
-            } else {
-              document.getElementById("kort").value = "";
-            }
-          })
-          .catch(error => {
+async function fetchCity(plz, ortFeld) {
+    if (plz.length === 5) {
+        try {
+            const response = await fetch(`https://api.zippopotam.us/de/${plz}`);
+            if (!response.ok) throw new Error("Keine Daten gefunden");
+            const data = await response.json();
+            document.getElementById(ortFeld).value = data.places[0]["place name"] || "";
+        } catch (error) {
             console.error("Fehler beim Abrufen des Orts:", error);
-            document.getElementById("kort").value = "";
-          });
-      } else {
-        // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
-        document.getElementById("kort").value = "";
-      }  
+            document.getElementById(ortFeld).value = "";
+        }
+    } else {
+        document.getElementById(ortFeld).value = "";
     }
-  </script>
-  <script>
-    function fetchCity2() {
-      const plz = document.getElementById("lplz").value.trim();
+}
 
-      // In Deutschland hat die PLZ genau 5 Stellen.
-      if (plz.length === 5) {
-        fetch(`https://api.zippopotam.us/de/${plz}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Keine Daten gefunden");
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data.places && data.places.length > 0) {
-              // Das erste Element enthält in der Regel den gewünschten Ortsnamen.
-              document.getElementById("lort").value = data.places[0]["place name"];
-            } else {
-              document.getElementById("lort").value = "";
-            }
-          })
-          .catch(error => {
-            console.error("Fehler beim Abrufen des Orts:", error);
-            document.getElementById("lort").value = "";
-          });
-      } else {
-        // Falls die PLZ nicht 5 Zeichen hat, den Ortswert zurücksetzen.
-        document.getElementById("lort").value = "";
-      }
-    }
-  </script>
+document.getElementById("kplz").addEventListener("input", () => fetchCity(document.getElementById("kplz").value, "kort"));
+document.getElementById("lplz").addEventListener("input", () => fetchCity(document.getElementById("lplz").value, "lort"));
+</script>
 
 	
         <script>
