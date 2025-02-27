@@ -137,7 +137,7 @@
 		<tr><td><label for="geburtstag">Geburtstag:</label></td><td><input type="date" id="geburtstag" name="geburtstag"></td></tr>
                 <tr><td><label for="vertreter">ggf. gesetzlicher Vertreter:</label></td><td><input type="text" id="vertreter" name="vertreter"></td></tr> 
 		<tr><td>Rechnungsanschrift</td></tr>
-                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" onfocus="getLocation()" oninput="copyAddress()" required></td></tr>
+                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" oninput="copyAddress()" required></td></tr>
                 <tr><td><label for="kplz">PLZ:</label></td><td><input type="number" id="kplz" name="kplz" placeholder="z. B. 80331" oninput="fetchCity(); copyAddress()" required></td></tr>
                 <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
 		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
@@ -172,7 +172,9 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
+    
     <script>
+	document.addEventListener("DOMContentLoaded", function getLocation()
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
