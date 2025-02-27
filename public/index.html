@@ -137,7 +137,7 @@
 		<tr><td><label for="geburtstag">Geburtstag:</label></td><td><input type="date" id="geburtstag" name="geburtstag"></td></tr>
                 <tr><td><label for="vertreter">ggf. gesetzlicher Vertreter:</label></td><td><input type="text" id="vertreter" name="vertreter"></td></tr> 
 		<tr><td>Rechnungsanschrift</td></tr>
-                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" oninput="copyAddress()" required></td></tr>
+                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" onfocus="getLocation()" oninput="copyAddress()" required></td></tr>
                 <tr><td><label for="kplz">PLZ:</label></td><td><input type="number" id="kplz" name="kplz" placeholder="z. B. 80331" oninput="fetchCity(); copyAddress()" required></td></tr>
                 <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
 		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
@@ -172,35 +172,54 @@
             <button type="submit">PDF generieren</button>
         </form>
     </div>
-	
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Überprüfen, ob die Geolocation-API verfügbar ist
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation wird von diesem Browser nicht unterstützt.");
+            }
+        }
 
-            // Umkehrgeokodierung mit Nominatim
-            var xhr = new XMLHttpRequest();
-            var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-            xhr.open("GET", url, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    var address = response.display_name;
-                    document.getElementById("ort").value = address;
-                }
-            };
-            xhr.send();
-        }, function(error) {
-            console.error("Fehler bei der Standortermittlung: ", error);
-        });
-    } else {
-        console.error("Geolocation wird von diesem Browser nicht unterstützt.");
-    }
-});
-</script>
+        function showPosition(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=de`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.address) {
+                        document.getElementById("ort").value = data.address.city || data.address.town || data.address.village || "Unbekannt";
+			document.getElementById("kstr").value = data.address.road + " " + data.address.house_number;
+                        document.getElementById("kplz").value = data.address.postcode || "";
+                        document.getElementById("kort").value = data.address.city || data.address.town || data.address.village || "";
+                    } else {
+                        alert("Standortinformationen konnten nicht ermittelt werden.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Fehler beim Abrufen der Adresse:", error);
+                    alert("Fehler beim Abrufen der Adresse.");
+                });
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Nutzer hat die Standortanfrage abgelehnt.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Standortinformationen sind nicht verfügbar.");
+                    break;
+                case error.TIMEOUT:
+                    alert("Die Standortanfrage hat zu lange gedauert.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("Ein unbekannter Fehler ist aufgetreten.");
+                    break;
+            }
+        }
+    </script>	
 <script>
     document.addEventListener("DOMContentLoaded", async function() {
         const response = await fetch("/api/stromanbieter");
