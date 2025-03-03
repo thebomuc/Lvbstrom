@@ -58,32 +58,28 @@
         <h2>PDF Formular Befüllung</h2>
         <form id="pdfForm">
             <table>
-                <tr>
-                    <td><label for="stromnutzung">Stromnutzung:</label></td>
+                <tr><td><label for="kundentyp">Kundentyp:</label></td>
                     <td>
-                        <select id="stromnutzung" name="stromnutzung">
-                            <option value="Milchviehhaltung">Milchviehhaltung</option>
-                            <option value="Bullenmast">Bullenmast</option>
-                            <option value="Kälbermast">Kälbermast</option>
-                            <option value="Sauenhaltung">Sauenhaltung</option>
-                            <option value="Ferkelaufzucht/Systemferkelaufzucht">Ferkelaufzucht/Systemferkelaufzucht</option>
-                            <option value="Schweinemast">Schweinemast</option>
-                            <option value="Flüssigfütterung">Flüssigfütterung</option>
-                            <option value="eigene Mahl- und Mischanlage">eigene Mahl- und Mischanlage</option>
-                            <option value="Junghennenaufzucht">Junghennenaufzucht</option>
-                            <option value="Legehennenhaltung">Legehennenhaltung</option>
-                            <option value="Hähnchenmast">Hähnchenmast</option>
-                            <option value="Putenmast">Putenmast</option>
-                            <option value="Entenmast">Entenmast</option>
-                            <option value="Getreidetrocknung/Getreideaufbereitung">Getreidetrocknung/Getreideaufbereitung</option>
-                            <option value="Baumschulen/Gewächshäuser">Baumschulen/Gewächshäuser</option>
-                            <option value="Gaststätten">Gaststätten</option>
-                            <option value="Campingplätze">Campingplätze</option>
-                            <option value="Obstbau">Obstbau</option>
-                            <option value="Sonstiger Verbrauch">Sonstiger Verbrauch</option>
+                        <select id="kundentyp" name="kundentyp">
+                            <option value="privat">Privatkunde</option>
+                            <option value="geschaeft">Geschäftskunde</option>
                         </select>
                     </td>
                 </tr>
+		<tr><td><label for="firma">Firma:</label></td><td><input type="text" id="firma" name="firma"></td></tr>
+		<tr><td><label for="kvorname">Vorname:</label></td><td><input type="text" id="kvorname" name="kvorname" required></td></tr>
+                <tr><td><label for="knachname">Nachname:</label></td><td><input type="text" id="knachname" name="knachname" required></td></tr>
+		<tr><td><label for="geburtstag">Geburtstag:</label></td><td><input type="date" id="geburtstag" name="geburtstag"></td></tr>
+                <tr><td><label for="vertreter">ggf. gesetzlicher Vertreter:</label></td><td><input type="text" id="vertreter" name="vertreter"></td></tr> 
+		<tr><td>Rechnungsanschrift</td></tr>
+                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" oninput="copyAddress()" required></td></tr>
+                <tr><td><label for="kplz">PLZ:</label></td><td><input type="number" id="kplz" name="kplz" placeholder="z. B. 80331" oninput="fetchCity(); copyAddress()" required></td></tr>
+                <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
+		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
+		<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
+                <tr><td><label for="lplz">PLZ:</label></td><td><input type="number" id="lplz" name="lplz" oninput="fetchCity()" required></td></tr>
+                <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
+                <tr><td>Kreisverbandsangaben</td></tr>
 		<tr>
                     <td><label for="kreisverband">Kreisverband:</label></td>
                     <td>
@@ -131,25 +127,38 @@
                 </tr>
                 <tr><td><label for="kreisverbandscode">Kreisverbandscode:</label></td><td><input type="number" id="kreisverbandscode" name="kreisverbandscode" required></td></tr>
                 <tr><td><label for="mitgliedsnummer">Mitgliedsnummer:</label></td><td><input type="text" id="mitgliedsnummer" name="mitgliedsnummer" required></td></tr>
-                <tr><td><label for="firma">Firma:</label></td><td><input type="text" id="firma" name="firma"></td></tr>
-		<tr><td><label for="kvorname">Vorname:</label></td><td><input type="text" id="kvorname" name="kvorname" required></td></tr>
-                <tr><td><label for="knachname">Nachname:</label></td><td><input type="text" id="knachname" name="knachname" required></td></tr>
-		<tr><td><label for="geburtstag">Geburtstag:</label></td><td><input type="date" id="geburtstag" name="geburtstag"></td></tr>
-                <tr><td><label for="vertreter">ggf. gesetzlicher Vertreter:</label></td><td><input type="text" id="vertreter" name="vertreter"></td></tr> 
-		<tr><td>Rechnungsanschrift</td></tr>
-                <tr><td><label for="kstr">Straße u. Hausnummer:</label></td><td><input type="text" id="kstr" name="kstr" oninput="copyAddress()" required></td></tr>
-                <tr><td><label for="kplz">PLZ:</label></td><td><input type="number" id="kplz" name="kplz" placeholder="z. B. 80331" oninput="fetchCity(); copyAddress()" required></td></tr>
-                <tr><td><label for="kort">Ort:</label></td><td><input type="text" id="kort" name="kort" oninput="copyAddress()" required></td></tr>
-		<tr><td>Lieferadresse (bei Abweichung anzupasssen)</td></tr>
-		<tr><td><label for="lstr">Straße u. Hausnummer:</label></td><td><input type="text" id="lstr" name="lstr" required></td></tr>
-                <tr><td><label for="lplz">PLZ:</label></td><td><input type="number" id="lplz" name="lplz" oninput="fetchCity()" required></td></tr>
-                <tr><td><label for="lort">Ort:</label></td><td><input type="text" id="lort" name="lort" required></td></tr>
-                <tr><td>Angaben zur Strombelieferung</td></tr>
+		<tr><td>Angaben zur Strombelieferung</td></tr>
 		<tr><td><label for="stromversorger">Stromversorger:</label></td><td><input list="stromversorger-list" id="stromversorger" name="stromversorger" required><datalist id="stromversorger-list"></datalist></td></tr>
                 <tr><td><label for="zaehlernummer">Zählernummer:</label></td><td><input type="text" id="zaehlernummer" name="zaehlernummer"></td></tr>
 		<tr><td><label for="marktl"><a href="https://www.bundesnetzagentur.de/SharedDocs/A_Z_Glossar/M/Marktlokation.html" target="_blank" rel="noopener noreferrer">Marktlokationen (MaLo-ID):</a></label></td><td><input type="number" id="marktl" name="marktl" maxlength="11" pattern="\d{11}" required></td></tr>
 		<tr><td><label for="vertragsnummer">Vertragsnummer:</label></td><td><input type="text" id="vertragsnummer" name="vertragsnummer" required></td></tr>
                 <tr><td><label for="verbrauch">Verbrauch Vorjahr (kWh):</label></td><td><input type="number" id="verbrauch" name="verbrauch" required></td></tr>
+		<tr>
+                    <td><label for="stromnutzung">Stromnutzung:</label></td>
+                    <td>
+                        <select id="stromnutzung" name="stromnutzung">
+                            <option value="Milchviehhaltung">Milchviehhaltung</option>
+                            <option value="Bullenmast">Bullenmast</option>
+                            <option value="Kälbermast">Kälbermast</option>
+                            <option value="Sauenhaltung">Sauenhaltung</option>
+                            <option value="Ferkelaufzucht/Systemferkelaufzucht">Ferkelaufzucht/Systemferkelaufzucht</option>
+                            <option value="Schweinemast">Schweinemast</option>
+                            <option value="Flüssigfütterung">Flüssigfütterung</option>
+                            <option value="eigene Mahl- und Mischanlage">eigene Mahl- und Mischanlage</option>
+                            <option value="Junghennenaufzucht">Junghennenaufzucht</option>
+                            <option value="Legehennenhaltung">Legehennenhaltung</option>
+                            <option value="Hähnchenmast">Hähnchenmast</option>
+                            <option value="Putenmast">Putenmast</option>
+                            <option value="Entenmast">Entenmast</option>
+                            <option value="Getreidetrocknung/Getreideaufbereitung">Getreidetrocknung/Getreideaufbereitung</option>
+                            <option value="Baumschulen/Gewächshäuser">Baumschulen/Gewächshäuser</option>
+                            <option value="Gaststätten">Gaststätten</option>
+                            <option value="Campingplätze">Campingplätze</option>
+                            <option value="Obstbau">Obstbau</option>
+                            <option value="Sonstiger Verbrauch">Sonstiger Verbrauch</option>
+                        </select>
+                    </td>
+                </tr>
 		<tr><td>Kontodaten</td></tr>
 		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" onchange="validateIban()" required></td></tr>
 		<tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
@@ -159,14 +168,6 @@
 		<tr><td><label for="handy">Handy:</label></td><td><input type="number" id="handy" name="handy"></td></tr>
 		<tr><td><label for="fax">Fax:</label></td><td><input type="number" id="fax" name="fax"></td></tr>
                 <tr><td><label for="email">E-Mail (für Rechnungen):</label></td><td><input type="email" id="email" name="email"></td></tr>
-                <tr><td><label for="kundentyp">Kundentyp:</label></td>
-                    <td>
-                        <select id="kundentyp" name="kundentyp">
-                            <option value="privat">Privatkunde</option>
-                            <option value="geschaeft">Geschäftskunde</option>
-                        </select>
-                    </td>
-                </tr>
                 <tr><td><label for="ort">aktueller Ort (für den Vertrag):</label></td><td><input type="text" id="ort" name="ort" required></td></tr>
 	    </table>
             <button type="submit">PDF generieren</button>
