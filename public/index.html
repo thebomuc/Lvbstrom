@@ -1,4 +1,4 @@
-DE05 1001 2345 0126 9058 01<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -160,7 +160,7 @@ DE05 1001 2345 0126 9058 01<!DOCTYPE html>
                     </td>
                 </tr>
 		<tr><td>Kontodaten</td></tr>
-		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" oninput="validateIban()" onblur="fetchBankDetailsFallback()" required></td></tr>
+		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" onchange="validateIban()" required></td></tr>
 		<tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
 		<tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic" required></td></tr>
                 <tr><td>Kontaktdaten</td></tr>
@@ -315,7 +315,6 @@ function copyAddress() {
     const bicField = document.getElementById("bic");
     const iban = ibanField.value.replace(/\s+/g, ""); // Leerzeichen entfernen
     const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}$/;
-	ibanField.value = iban;
 
     if (!ibanRegex.test(iban)) {
         ibanField.setCustomValidity("Ungültige IBAN");
@@ -331,15 +330,15 @@ function copyAddress() {
             bicField.value = data.bankData.bic || "";
         } else {
             // Falls keine Daten von openiban → Fallback-API
+            await fetchBankDetailsFallback(iban);
         }
     } catch (error) {
         console.error("Fehler bei OpenIBAN:", error);
+        await fetchBankDetailsFallback(iban); // Falls API-Aufruf fehlschlägt → Fallback
     }
 }
 
 async function fetchBankDetailsFallback(iban) {
-    const ibanField = document.getElementById("iban");
-    const iban = ibanField.value.replace(/\s+/g, ""); // Leerzeichen entfernen
     const bankField = document.getElementById("bankname");
     const bicField = document.getElementById("bic");
 
