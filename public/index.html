@@ -175,10 +175,10 @@
         </form>
     </div>
 <script>
-    function toggleFirma() {
+    function toggleFirma(){
         const kundentyp = document.getElementById("kundentyp").value;
         const firmaField = document.getElementById("firma");
-	const firmaInput = document.getElementById("firma");
+	const firmaInput = document.querySelector("#firma input"); // <input> Element innerhalb der <tr>
 
         if (kundentyp === "geschaeft") {
             firmaField.style.display = "table-row";
