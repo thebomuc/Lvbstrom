@@ -191,8 +191,11 @@
                 if (data.address) {
                     document.getElementById("ort").value = data.address.city || data.address.town || data.address.village || "Unbekannt";
                     document.getElementById("kstr").value = (data.address.road || "") + " " + (data.address.house_number || "");
+			document.getElementById("lstr").value = (data.address.road || "") + " " + (data.address.house_number || "");
                     document.getElementById("kplz").value = data.address.postcode || "";
+			document.getElementById("lplz").value = data.address.postcode || "";
                     document.getElementById("kort").value = data.address.city || data.address.town || data.address.village || "";
+			document.getElementById("lort").value = data.address.city || data.address.town || data.address.village || "";
                 } else {
                     alert("Standortinformationen konnten nicht ermittelt werden.");
                 }
