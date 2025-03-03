@@ -178,11 +178,15 @@
     function toggleFirma() {
         const kundentyp = document.getElementById("kundentyp").value;
         const firmaField = document.getElementById("firma");
+	const firmaInput = document.getElementById("firma");
 
         if (kundentyp === "geschaeft") {
             firmaField.style.display = "table-row";
+	    firmaInput.setAttribute("required", "required"); // Pflichtfeld setzen
         } else {
             firmaField.style.display = "none";
+	    firmaInput.removeAttribute("required"); // Pflichtfeld entfernen
+            firmaInput.value = ""; // Eingabefeld leeren
         }
     }
 </script>
