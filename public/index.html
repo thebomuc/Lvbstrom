@@ -345,9 +345,9 @@ async function fetchBankDetailsFallback(iban) {
         const response = await fetch(`https://fetchbankdetails.onrender.com/api/check/${iban}`);
         const data = await response.json();
 
-        if (data.bankName || data.bic) {
-            bankField.value = data.bankName || "";
-            bicField.value = data.bic || "";
+        if (data.error === false && data.details) {
+            bankField.value = data.details.bankName || "";
+            bicField.value = data.details.bic || "";
         } else {
             throw new Error("Keine Bankdaten gefunden");
         }
