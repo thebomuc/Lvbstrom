@@ -338,6 +338,8 @@ function copyAddress() {
 }
 
 async function fetchBankDetailsFallback(iban) {
+    const ibanField = document.getElementById("iban");
+    const iban = ibanField.value.replace(/\s+/g, ""); // Leerzeichen entfernen
     const bankField = document.getElementById("bankname");
     const bicField = document.getElementById("bic");
 
