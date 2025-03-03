@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DE05 1001 2345 0126 9058 01<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -315,7 +315,7 @@ function copyAddress() {
     const bicField = document.getElementById("bic");
     const iban = ibanField.value.replace(/\s+/g, ""); // Leerzeichen entfernen
     const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}$/;
-	bicField.value = iban;
+	ibanField.value = iban;
 
     if (!ibanRegex.test(iban)) {
         ibanField.setCustomValidity("Ungültige IBAN");
