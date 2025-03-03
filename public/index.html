@@ -356,7 +356,19 @@ async function fetchBankDetailsFallback(piban) {
     try {
         const response = await fetch(`https://fetchbankdetails.onrender.com/api/check/${piban}`);
         const data = await response.json();
-
+	if (data.error) {
+            if (data.code === 4003) {
+                console.warn("Tägliches Anfrage-Limit erreicht:", data.message);
+                bankField.value = "API-Limit erreicht";
+                bicField.value = "";
+                return;
+            } else {
+                console.error("Fehler von Fallback-API:", data.message);
+                bankField.value = "Fehler bei API-Abfrage";
+                bicField.value = "";
+                return;
+            }
+        }
         if (data.error === false && data.details) {
             bankField.value = data.details.bankName || "";
             bicField.value = data.details.bic || "";
