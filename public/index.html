@@ -160,7 +160,7 @@
                     </td>
                 </tr>
 		<tr><td>Kontodaten</td></tr>
-		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" oninput="validateIban()" required></td></tr>
+		<tr><td><label for="iban">IBAN:</label></td><td><input type="text" id="iban" name="iban" placeholder="z. B. DE12345678901234567890" required></td></tr>
 		<tr><td><label for="bankname">Bankname:</label></td><td><input type="text" id="bankname" name="bankname" required></td></tr>
 		<tr><td><label for="bic">BIC:</label></td><td><input type="text" id="bic" name="bic" required></td></tr>
                 <tr><td>Kontaktdaten</td></tr>
@@ -309,11 +309,14 @@ function copyAddress() {
         document.getElementById("kort").value = "";
       }  
     }
-document.getElementById("iban").addEventListener("input", function () {
-    let iban = this.value.replace(/\s+/g, ""); // Leerzeichen entfernen
-    this.value = iban.replace(/(.{4})/g, "$1 ").trim(); // Alle 4 Zeichen ein Leerzeichen
-});
-    
+    document.getElementById("iban").addEventListener("input", function () {
+    	let iban = this.value.replace(/\s+/g, ""); // Leerzeichen entfernen
+    	this.value = iban.replace(/(.{4})/g, "$1 ").trim(); // Alle 4 Zeichen ein Leerzeichen
+    	if (iban.length === 22) { // Prüfe, ob die IBAN vollständig ist (22 Zeichen für DE)
+        	validateIban(iban);
+    	}
+    });
+	
     async function validateIban() {
     const ibanField = document.getElementById("iban");
     const bankField = document.getElementById("bankname");
