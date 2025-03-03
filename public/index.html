@@ -359,13 +359,9 @@ async function fetchBankDetailsFallback(piban) {
 	if (data.error) {
             if (data.code === 4003) {
                 console.warn("Tägliches Anfrage-Limit erreicht:", data.message);
-                bankField.value = "API-Limit erreicht";
-                bicField.value = "";
                 return;
             } else {
                 console.error("Fehler von Fallback-API:", data.message);
-                bankField.value = "Fehler bei API-Abfrage";
-                bicField.value = "";
                 return;
             }
         }
