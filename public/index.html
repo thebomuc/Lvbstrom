@@ -309,15 +309,20 @@ function copyAddress() {
         document.getElementById("kort").value = "";
       }  
     }
+document.getElementById("iban").addEventListener("input", function () {
+    let iban = this.value.replace(/\s+/g, ""); // Leerzeichen entfernen
+    this.value = iban.replace(/(.{4})/g, "$1 ").trim(); // Alle 4 Zeichen ein Leerzeichen
+});
     
     async function validateIban() {
     const ibanField = document.getElementById("iban");
     const bankField = document.getElementById("bankname");
     const bicField = document.getElementById("bic");
     const iban = ibanField.value.replace(/\s+/g, ""); // Leerzeichen entfernen
-	ibanField.value = iban
     const ibanRegex = /^[A-Z]{2}[0-9]{2}[A-Z0-9]{10,30}$/;
-
+    bicField.value = "";
+    bankField.value = "";
+	    
     if (!ibanRegex.test(iban)) {
         ibanField.setCustomValidity("Ungültige IBAN");
     } else {
